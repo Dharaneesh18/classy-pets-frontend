@@ -7,10 +7,10 @@ const ExplorePage = ({ addToCart }) => {
   const [search, setSearch] = useState("");
 
   useEffect(() => {
-    // Use the environment variable instead of hardcoding
+    // Fetch products from backend
     axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/products`)
       .then(res => setProducts(res.data))
-      .catch(err => console.log(err));
+      .catch(err => console.log("Error fetching products:", err));
   }, []);
 
   const filtered = products.filter(p =>
@@ -43,9 +43,15 @@ const ExplorePage = ({ addToCart }) => {
       </div>
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "20px" }}>
-        {filtered.map(product => (
-          <ProductCard key={product._id} product={product} addToCart={addToCart} />
-        ))}
+        {filtered.length > 0 ? (
+          filtered.map(product => (
+            <ProductCard key={product._id} product={product} addToCart={addToCart} />
+          ))
+        ) : (
+          <p style={{ textAlign: "center", gridColumn: "1 / -1", color: "#0077ff", fontWeight: 600 }}>
+            No products found.
+          </p>
+        )}
       </div>
     </div>
   );

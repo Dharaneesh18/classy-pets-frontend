@@ -27,7 +27,6 @@ const ProductCard = ({ product, addToCart }) => {
         e.currentTarget.style.boxShadow = "0 4px 12px rgba(0,0,0,0.05)";
       }}
     >
-      {/* Product Image */}
       {product.image && (
         <div style={{ overflow: "hidden", borderRadius: 12, marginBottom: 12 }}>
           <img
@@ -45,12 +44,10 @@ const ProductCard = ({ product, addToCart }) => {
         </div>
       )}
 
-      {/* Product Name */}
       <h3 style={{ fontSize: 18, color: "#004aad", fontWeight: 700, marginBottom: 8 }}>
         {product.name}
       </h3>
 
-      {/* Price Selector */}
       <div style={{ marginBottom: 12 }}>
         {prices.map((p, i) => (
           <span
@@ -74,7 +71,6 @@ const ProductCard = ({ product, addToCart }) => {
         ))}
       </div>
 
-      {/* Add to Cart Button */}
       <button
         onClick={() => addToCart({ ...product, price: selectedPrice })}
         style={{
@@ -88,12 +84,8 @@ const ProductCard = ({ product, addToCart }) => {
           cursor: "pointer",
           transition: "all 0.2s",
         }}
-        onMouseEnter={e => {
-          e.currentTarget.style.background = "#00997f";
-        }}
-        onMouseLeave={e => {
-          e.currentTarget.style.background = "#00c49f";
-        }}
+        onMouseEnter={e => { e.currentTarget.style.background = "#00997f"; }}
+        onMouseLeave={e => { e.currentTarget.style.background = "#00c49f"; }}
       >
         Add to Cart
       </button>
