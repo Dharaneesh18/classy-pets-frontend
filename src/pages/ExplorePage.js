@@ -7,8 +7,9 @@ const ExplorePage = ({ addToCart }) => {
   const [search, setSearch] = useState("");
 
   useEffect(() => {
-    // Replace this with your live backend URL when deployed
-axios.get("https://classy-pets-backend-7.onrender.com/api/products")      .then(res => setProducts(res.data))
+    // Use the environment variable instead of hardcoding
+    axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/products`)
+      .then(res => setProducts(res.data))
       .catch(err => console.log(err));
   }, []);
 
