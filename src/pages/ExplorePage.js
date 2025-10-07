@@ -5,7 +5,8 @@ const ExplorePage = ({ addToCart }) => {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    axios.get("http://localhost:5000/api/products")
+    // Fetch from your Render backend
+    axios.get("https://classy-pets-backend-7.onrender.com/api/products")
       .then(res => setProducts(res.data))
       .catch(err => console.log(err));
   }, []);
@@ -16,7 +17,13 @@ const ExplorePage = ({ addToCart }) => {
       minHeight: "calc(100vh - 70px)",
       background: "linear-gradient(to bottom, #e0f7ff, #f0f8ff)"
     }}>
-      <h2 style={{ textAlign: "center", color: "#004466", marginBottom: "30px", fontSize: "28px", fontWeight: "bold" }}>
+      <h2 style={{
+        textAlign: "center",
+        color: "#004466",
+        marginBottom: "30px",
+        fontSize: "28px",
+        fontWeight: "bold"
+      }}>
         Explore Our Fish & Accessories
       </h2>
 
@@ -47,7 +54,7 @@ const ExplorePage = ({ addToCart }) => {
             }}
           >
             <img
-              src={p.image ? process.env.PUBLIC_URL + p.image : "https://via.placeholder.com/250x150?text=No+Image"}
+              src={p.image ? p.image : "https://via.placeholder.com/250x150?text=No+Image"}
               alt={p.name}
               style={{
                 width: "100%",
@@ -58,10 +65,20 @@ const ExplorePage = ({ addToCart }) => {
                 transition: "transform 0.3s"
               }}
             />
-            <h3 style={{ color: "#004466", fontWeight: "bold", fontSize: "18px", marginBottom: "8px" }}>
+            <h3 style={{
+              color: "#004466",
+              fontWeight: "bold",
+              fontSize: "18px",
+              marginBottom: "8px"
+            }}>
               {p.name}
             </h3>
-            <p style={{ fontWeight: "bold", color: "#ff4500", marginBottom: "15px", fontSize: "16px" }}>
+            <p style={{
+              fontWeight: "bold",
+              color: "#ff4500",
+              marginBottom: "15px",
+              fontSize: "16px"
+            }}>
               ₹ {Array.isArray(p.price) ? p.price[0] : p.price}
             </p>
             <button
