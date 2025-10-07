@@ -5,7 +5,7 @@ const ExplorePage = ({ addToCart }) => {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    // Fetch from your Render backend
+    // Fetch products from Render backend
     axios.get("https://classy-pets-backend-7.onrender.com/api/products")
       .then(res => setProducts(res.data))
       .catch(err => console.log(err));
@@ -54,7 +54,7 @@ const ExplorePage = ({ addToCart }) => {
             }}
           >
             <img
-              src={p.image ? p.image : "https://via.placeholder.com/250x150?text=No+Image"}
+              src={p.image ? `https://classy-pets-backend-7.onrender.com${p.image}` : "https://via.placeholder.com/250x150?text=No+Image"}
               alt={p.name}
               style={{
                 width: "100%",
