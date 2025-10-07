@@ -8,19 +8,28 @@ function App() {
   const [page, setPage] = useState("welcome");
   const [cart, setCart] = useState([]);
 
+  // Add product to cart
   const addToCart = (product) => {
     const exists = cart.find(p => p._id === product._id);
     if (!exists) setCart([...cart, { ...product, quantity: 1 }]);
   };
 
   return (
-    <div style={{ background: "#f0f8ff", minHeight: "100vh", fontFamily: "Arial, sans-serif" }}>
+    <div style={{
+      background: "#f0f8ff",
+      minHeight: "100vh",
+      fontFamily: "Arial, sans-serif",
+    }}>
+      
+      {/* Navbar */}
       <Navbar cartCount={cart.length} setPage={setPage} />
 
+      {/* Pages */}
       {page === "welcome" && <WelcomePage goExplore={() => setPage("explore")} />}
       {page === "explore" && <ExplorePage addToCart={addToCart} />}
       {page === "cart" && <CartPage cart={cart} setPage={setPage} />}
 
+      {/* Floating Cart Button */}
       {cart.length > 0 && page !== "cart" && (
         <button
           onClick={() => setPage("cart")}
@@ -28,28 +37,21 @@ function App() {
             position: "fixed",
             bottom: "25px",
             right: "25px",
-            padding: "15px 30px",
-            background: "#00d4ff",
-            color: "#004466",
+            padding: "15px 25px",
+            background: "#00bfff",
+            color: "#fff",
             border: "none",
             borderRadius: "25px",
             cursor: "pointer",
             fontWeight: "bold",
-            fontSize: "16px",
-            boxShadow: "0 6px 15px rgba(0,0,0,0.3)",
+            boxShadow: "0 5px 15px rgba(0,0,0,0.3)",
             transition: "all 0.3s",
-            zIndex: 100
+            zIndex: 100,
           }}
-          onMouseEnter={e => {
-            e.currentTarget.style.transform = "scale(1.1)";
-            e.currentTarget.style.background = "#0095cc";
-          }}
-          onMouseLeave={e => {
-            e.currentTarget.style.transform = "scale(1)";
-            e.currentTarget.style.background = "#00d4ff";
-          }}
+          onMouseEnter={e => e.currentTarget.style.transform = "scale(1.1)"}
+          onMouseLeave={e => e.currentTarget.style.transform = "scale(1)"}
         >
-          🛒 Go to Cart ({cart.length})
+          Go to Cart ({cart.length})
         </button>
       )}
     </div>
