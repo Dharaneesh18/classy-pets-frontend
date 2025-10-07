@@ -4,65 +4,56 @@ import WelcomePage from "./pages/WelcomePage";
 import ExplorePage from "./pages/ExplorePage";
 import CartPage from "./pages/CartPage";
 
-const App = () => {
-  const [view, setView] = useState("welcome"); // 'welcome' | 'explore' | 'cart'
+function App() {
+  const [page, setPage] = useState("welcome");
   const [cart, setCart] = useState([]);
 
   const addToCart = (product) => {
-    const existing = cart.find((c) => c.id === product._id);
-    if (existing) {
-      setCart(cart.map(c => c.id === product._id ? { ...c, qty: c.qty + 1 } : c));
-    } else {
-      setCart([...cart, { ...product, qty: 1, id: product._id }]);
-    }
+    const exists = cart.find(p => p._id === product._id);
+    if (!exists) setCart([...cart, { ...product, quantity: 1 }]);
   };
-
-  const updateQty = (id, qty) => {
-    if (qty <= 0) {
-      setCart(cart.filter(c => c.id !== id));
-    } else {
-      setCart(cart.map(c => c.id === id ? { ...c, qty } : c));
-    }
-  };
-
-  const removeFromCart = (id) => setCart(cart.filter(c => c.id !== id));
-  const clearCart = () => setCart([]);
 
   return (
-    <div style={{ background: "#e0f7ff", minHeight: "100vh" }}>
-      <Navbar goTo={setView} cartCount={cart.reduce((s, c) => s + c.qty, 0)} />
-      {view === "welcome" && <WelcomePage onExplore={() => setView("explore")} />}
-      {view === "explore" && <ExplorePage addToCart={addToCart} />}
-      {view === "cart" && (
-        <CartPage
-          cart={cart}
-          updateQty={updateQty}
-          removeFromCart={removeFromCart}
-          clearCart={() => { clearCart(); setView("explore"); }}
-          onBack={() => setView("explore")}
-        />
-      )}
+    <div style={{ background: "#f0f8ff", minHeight: "100vh", fontFamily: "Arial, sans-serif" }}>
+      <Navbar cartCount={cart.length} setPage={setPage} />
 
-      {/* Mobile bottom cart button */}
-      <div style={{ position: "fixed", right: 20, bottom: 20 }}>
+      {page === "welcome" && <WelcomePage goExplore={() => setPage("explore")} />}
+      {page === "explore" && <ExplorePage addToCart={addToCart} />}
+      {page === "cart" && <CartPage cart={cart} setPage={setPage} />}
+
+      {cart.length > 0 && page !== "cart" && (
         <button
-          onClick={() => setView("cart")}
+          onClick={() => setPage("cart")}
           style={{
-            background: "#0088ff",
-            color: "white",
+            position: "fixed",
+            bottom: "25px",
+            right: "25px",
+            padding: "15px 30px",
+            background: "#00d4ff",
+            color: "#004466",
             border: "none",
-            borderRadius: 12,
-            padding: "10px 14px",
-            boxShadow: "0 6px 14px rgba(0,136,255,0.25)",
+            borderRadius: "25px",
             cursor: "pointer",
-            fontWeight: 700
+            fontWeight: "bold",
+            fontSize: "16px",
+            boxShadow: "0 6px 15px rgba(0,0,0,0.3)",
+            transition: "all 0.3s",
+            zIndex: 100
+          }}
+          onMouseEnter={e => {
+            e.currentTarget.style.transform = "scale(1.1)";
+            e.currentTarget.style.background = "#0095cc";
+          }}
+          onMouseLeave={e => {
+            e.currentTarget.style.transform = "scale(1)";
+            e.currentTarget.style.background = "#00d4ff";
           }}
         >
-          Cart ({cart.reduce((s,c)=>s+c.qty,0)})
+          🛒 Go to Cart ({cart.length})
         </button>
-      </div>
+      )}
     </div>
   );
-};
+}
 
 export default App;

@@ -1,57 +1,90 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import ProductCard from "../components/ProductCard";
 
 const ExplorePage = ({ addToCart }) => {
   const [products, setProducts] = useState([]);
-  const [search, setSearch] = useState("");
 
   useEffect(() => {
-    // Fetch products from backend
-    axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/products`)
+    axios.get("http://localhost:5000/api/products")
       .then(res => setProducts(res.data))
-      .catch(err => console.log("Error fetching products:", err));
+      .catch(err => console.log(err));
   }, []);
 
-  const filtered = products.filter(p =>
-    p.name.toLowerCase().includes(search.toLowerCase())
-  );
-
   return (
-    <div style={{ padding: "30px 20px 80px 20px", background: "#e0f7ff", minHeight: "100vh" }}>
-      <h2 style={{ color: "#004aad", textAlign: "center", marginBottom: 24, fontSize: 28, fontWeight: 700 }}>
-        🐠 Explore Our Fish & Aquarium Collection
+    <div style={{
+      padding: "30px",
+      minHeight: "calc(100vh - 70px)",
+      background: "linear-gradient(to bottom, #e0f7ff, #f0f8ff)"
+    }}>
+      <h2 style={{ textAlign: "center", color: "#004466", marginBottom: "30px", fontSize: "28px", fontWeight: "bold" }}>
+        Explore Our Fish & Accessories
       </h2>
 
-      <div style={{ display: "flex", justifyContent: "center", marginBottom: 30, gap: 12, flexWrap: "wrap" }}>
-        <input
-          type="text"
-          placeholder="Search products..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          style={{
-            padding: "14px 18px",
-            borderRadius: 14,
-            border: "1px solid #cfe9ff",
-            width: "320px",
-            outline: "none",
-            fontSize: 16,
-            boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
-            transition: "all 0.2s",
-          }}
-        />
-      </div>
-
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "20px" }}>
-        {filtered.length > 0 ? (
-          filtered.map(product => (
-            <ProductCard key={product._id} product={product} addToCart={addToCart} />
-          ))
-        ) : (
-          <p style={{ textAlign: "center", gridColumn: "1 / -1", color: "#0077ff", fontWeight: 600 }}>
-            No products found.
-          </p>
-        )}
+      <div style={{
+        display: "grid",
+        gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
+        gap: "25px"
+      }}>
+        {products.map(p => (
+          <div
+            key={p._id}
+            style={{
+              background: "#fff",
+              borderRadius: "15px",
+              padding: "15px",
+              boxShadow: "0 6px 15px rgba(0,0,0,0.2)",
+              textAlign: "center",
+              transition: "transform 0.3s, box-shadow 0.3s",
+              cursor: "pointer"
+            }}
+            onMouseEnter={e => {
+              e.currentTarget.style.transform = "scale(1.05)";
+              e.currentTarget.style.boxShadow = "0 10px 25px rgba(0,0,0,0.35)";
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.transform = "scale(1)";
+              e.currentTarget.style.boxShadow = "0 6px 15px rgba(0,0,0,0.2)";
+            }}
+          >
+            <img
+              src={p.image ? process.env.PUBLIC_URL + p.image : "https://via.placeholder.com/250x150?text=No+Image"}
+              alt={p.name}
+              style={{
+                width: "100%",
+                height: "180px",
+                objectFit: "cover",
+                borderRadius: "10px",
+                marginBottom: "10px",
+                transition: "transform 0.3s"
+              }}
+            />
+            <h3 style={{ color: "#004466", fontWeight: "bold", fontSize: "18px", marginBottom: "8px" }}>
+              {p.name}
+            </h3>
+            <p style={{ fontWeight: "bold", color: "#ff4500", marginBottom: "15px", fontSize: "16px" }}>
+              ₹ {Array.isArray(p.price) ? p.price[0] : p.price}
+            </p>
+            <button
+              onClick={() => addToCart(p)}
+              style={{
+                padding: "10px 25px",
+                borderRadius: "25px",
+                border: "none",
+                background: "#00bfff",
+                color: "#fff",
+                fontWeight: "bold",
+                fontSize: "16px",
+                cursor: "pointer",
+                boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
+                transition: "all 0.3s"
+              }}
+              onMouseEnter={e => e.currentTarget.style.background = "#0095cc"}
+              onMouseLeave={e => e.currentTarget.style.background = "#00bfff"}
+            >
+              Add to Cart
+            </button>
+          </div>
+        ))}
       </div>
     </div>
   );
